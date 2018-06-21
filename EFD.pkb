@@ -11,97 +11,9 @@ CREATE OR REPLACE PACKAGE BODY EDUMAN.EFD
    | Ercan DUMAN    | 25.01.2018           | Package creation.
   **************************************************************************************/
  IS
-
   cs_OUTPUT_FAILURE_PREFIX CONSTANT VARCHAR2(7) := 'ERROR> ';
   cs_OUTPUT_SUCCESS_PREFIX CONSTANT VARCHAR2(7) := 'INFO> ';
   cs_PROGRAM_OUTPUT        CONSTANT VARCHAR2(8) := 'OUTPUT> ';
-
-  PROCEDURE SayingHello(pis_Name IN VARCHAR2)
-  /**************************************************************************************
-    * Purpose    : Create a program that prompts for your name and prints a greeting using your name.
-    * Notes      : N/A
-    * -------------------------------------------------------------------------------------
-    * Parameters : 
-      - pis_Name  : User name input text.
-    * Return     : N/A
-    * Exceptions : N/A
-    * -------------------------------------------------------------------------------------
-    * History    :        
-    | Author         | Date                 | Purpose
-    |-------         |-----------           |-----------------------------------
-    | Ercan DUMAN    | 25-JAN-2018          | Procedure creation.
-    **************************************************************************************/
-   IS
-  BEGIN
-    dbms_output.put_line(cs_PROGRAM_OUTPUT || 'Hello, ' || pis_Name ||
-                         ' nice to meet you!');
-  END SayingHello;
-
-  PROCEDURE CountingTheNumberOfCharacters(pis_InputSring VARCHAR2)
-  /**************************************************************************************
-    * Purpose    : Create a program that prompts for an input string and displays output that shows the input string and the number of characters the string contains.. 
-    * Notes      : If the user enters nothing, state that the user must enter something into the program.
-    * -------------------------------------------------------------------------------------
-    * Parameters : 
-     - pis_InputSring : Qoute input text.
-    * Return     : N/A
-    * Exceptions : 
-     - ve_EmptyInputException: Raised if the input is empty!
-    * -------------------------------------------------------------------------------------
-    * History    :        
-    | Author         | Date                 | Purpose
-    |-------         |-----------           |-----------------------------------
-    | Ercan DUMAN    | 20-JUN-2018          | Procedure creation.
-    **************************************************************************************/
-   IS
-    vn_InputStringLentgh NUMBER;
-    ve_EmptyInputException EXCEPTION;
-  BEGIN
-    vn_InputStringLentgh := length(pis_InputSring);
-    IF vn_InputStringLentgh IS NULL
-       OR vn_InputStringLentgh <= 0 THEN
-      RAISE ve_EmptyInputException;
-    END IF;
-  
-    dbms_output.put_line(cs_OUTPUT_SUCCESS_PREFIX ||
-                         'What is the input string? ''' || pis_InputSring || '''');
-    dbms_output.put_line(cs_PROGRAM_OUTPUT || pis_InputSring || ' has ' ||
-                         vn_InputStringLentgh || ' characters!');
-  EXCEPTION
-    WHEN ve_EmptyInputException THEN
-      dbms_output.put_line(cs_OUTPUT_FAILURE_PREFIX ||
-                           ' must enter something into the program!');
-  END CountingTheNumberOfCharacters;
-
-  PROCEDURE PrintingQuotes
-  (
-    pis_Quote  IN VARCHAR2,
-    pis_Author IN VARCHAR2
-  )
-  /**************************************************************************************
-    * Purpose    : Create a program that prompts for a quote and an author. Display the quotation and author. 
-    * Notes      : 
-    * -------------------------------------------------------------------------------------
-    * Parameters : 
-     - pis_Quote  : Qoute input text.
-     - pis_Author : The author of qoute.
-    * Return     : N/A
-    * Exceptions : N/A
-    * -------------------------------------------------------------------------------------
-    * History    :        
-    | Author         | Date                 | Purpose
-    |-------         |-----------           |-----------------------------------
-    | Ercan DUMAN    | 21-JUN-2018          | Procedure creation.
-    **************************************************************************************/
-   IS
-  BEGIN
-    dbms_output.put_line(cs_OUTPUT_SUCCESS_PREFIX || 'What is the quote? ' ||
-                         pis_Quote);
-    dbms_output.put_line(cs_OUTPUT_SUCCESS_PREFIX || 'Who said it? ' ||
-                         pis_Author);
-    dbms_output.put_line(cs_PROGRAM_OUTPUT || pis_Author || ' says, "' ||
-                         pis_Quote || '"');
-  END PrintingQuotes;
 
   PROCEDURE AddWAExecutionLog
   (
@@ -139,5 +51,127 @@ CREATE OR REPLACE PACKAGE BODY EDUMAN.EFD
     COMMIT;
   END AddWAExecutionLog;
 
+  PROCEDURE SayingHello(pis_Name IN VARCHAR2)
+  /**************************************************************************************
+    * Purpose    : Create a program that prompts for your name and prints a greeting using your name.
+    * Notes      : N/A
+    * -------------------------------------------------------------------------------------
+    * Parameters : 
+      - pis_Name  : User name input text.
+    * Return     : N/A
+    * Exceptions : N/A
+    * -------------------------------------------------------------------------------------
+    * History    :        
+    | Author         | Date                 | Purpose
+    |-------         |-----------           |-----------------------------------
+    | Ercan DUMAN    | 25-JAN-2018          | Procedure creation.
+    **************************************************************************************/
+   IS
+    vd_LastExecutionDate DATE;
+    vs_ErrorMessage      VARCHAR2(3000);
+  BEGIN
+    vd_LastExecutionDate := SYSDATE;
+    dbms_output.put_line(cs_PROGRAM_OUTPUT || 'Hello, ' || pis_Name ||
+                         ' nice to meet you!');
+    -- logging  
+    AddWAExecutionLog('EFD.SayingHello', vd_LastExecutionDate, SYSDATE, 'S', 'SayingHello, Run successfully!');
+  EXCEPTION
+    WHEN OTHERS THEN
+      vs_ErrorMessage := SUBSTR('SayingHello ERROR :  ' || SQLERRM ||
+                                DBMS_UTILITY.format_error_backtrace, 1, 3000);
+      AddWAExecutionLog('EFD.SayingHello', vd_LastExecutionDate, SYSDATE, 'F', vs_ErrorMessage);
+  END SayingHello;
+
+  PROCEDURE CountingTheNumberOfCharacters(pis_InputSring VARCHAR2)
+  /**************************************************************************************
+    * Purpose    : Create a program that prompts for an input string and displays output that shows the input string and the number of characters the string contains.. 
+    * Notes      : If the user enters nothing, state that the user must enter something into the program.
+    * -------------------------------------------------------------------------------------
+    * Parameters : 
+     - pis_InputSring : Qoute input text.
+    * Return     : N/A
+    * Exceptions : 
+     - ve_EmptyInputException: Raised if the input is empty!
+    * -------------------------------------------------------------------------------------
+    * History    :        
+    | Author         | Date                 | Purpose
+    |-------         |-----------           |-----------------------------------
+    | Ercan DUMAN    | 20-JUN-2018          | Procedure creation.
+    **************************************************************************************/
+   IS
+    vn_InputStringLentgh NUMBER;
+    vd_LastExecutionDate DATE;
+    vs_ErrorMessage      VARCHAR2(3000);
+    ve_EmptyInputException EXCEPTION;
+  BEGIN
+    vd_LastExecutionDate := SYSDATE;
+    vn_InputStringLentgh := length(pis_InputSring);
+    IF vn_InputStringLentgh IS NULL
+       OR vn_InputStringLentgh <= 0 THEN
+      RAISE ve_EmptyInputException;
+    END IF;
+  
+    dbms_output.put_line(cs_OUTPUT_SUCCESS_PREFIX ||
+                         'What is the input string? ''' || pis_InputSring || '''');
+    dbms_output.put_line(cs_PROGRAM_OUTPUT || pis_InputSring || ' has ' ||
+                         vn_InputStringLentgh || ' characters!');
+  
+    -- logging  
+    AddWAExecutionLog('EFD.CountingTheNumberOfCharacters', vd_LastExecutionDate, SYSDATE, 'S', 'CountingTheNumberOfCharacters, Run successfully!');
+  EXCEPTION
+    WHEN ve_EmptyInputException THEN
+      vs_ErrorMessage := SUBSTR('CountingTheNumberOfCharacters ERROR :  ' ||
+                                ' must enter something into the program! ' ||
+                                SQLERRM ||
+                                DBMS_UTILITY.format_error_backtrace, 1, 3000);
+      AddWAExecutionLog('EFD.CountingTheNumberOfCharacters', vd_LastExecutionDate, SYSDATE, 'F', vs_ErrorMessage);
+    
+    WHEN OTHERS THEN
+      vs_ErrorMessage := SUBSTR('CountingTheNumberOfCharacters ERROR :  ' ||
+                                SQLERRM ||
+                                DBMS_UTILITY.format_error_backtrace, 1, 3000);
+      AddWAExecutionLog('EFD.CountingTheNumberOfCharacters', vd_LastExecutionDate, SYSDATE, 'F', vs_ErrorMessage);
+  END CountingTheNumberOfCharacters;
+
+  PROCEDURE PrintingQuotes
+  (
+    pis_Quote  IN VARCHAR2,
+    pis_Author IN VARCHAR2
+  )
+  /**************************************************************************************
+    * Purpose    : Create a program that prompts for a quote and an author. Display the quotation and author. 
+    * Notes      : 
+    * -------------------------------------------------------------------------------------
+    * Parameters : 
+     - pis_Quote  : Qoute input text.
+     - pis_Author : The author of qoute.
+    * Return     : N/A
+    * Exceptions : N/A
+    * -------------------------------------------------------------------------------------
+    * History    :        
+    | Author         | Date                 | Purpose
+    |-------         |-----------           |-----------------------------------
+    | Ercan DUMAN    | 21-JUN-2018          | Procedure creation.
+    **************************************************************************************/
+   IS
+    vd_LastExecutionDate DATE;
+    vs_ErrorMessage      VARCHAR2(3000);
+  BEGIN
+    vd_LastExecutionDate := SYSDATE;
+    dbms_output.put_line(cs_OUTPUT_SUCCESS_PREFIX || 'What is the quote? ' ||
+                         pis_Quote);
+    dbms_output.put_line(cs_OUTPUT_SUCCESS_PREFIX || 'Who said it? ' ||
+                         pis_Author);
+    dbms_output.put_line(cs_PROGRAM_OUTPUT || pis_Author || ' says, "' ||
+                         pis_Quote || '"');
+  
+    -- logging  
+    AddWAExecutionLog('EFD.PrintingQuotes', vd_LastExecutionDate, SYSDATE, 'S', 'PrintingQuotes, Run successfully!');
+  EXCEPTION
+    WHEN OTHERS THEN
+      vs_ErrorMessage := SUBSTR('PrintingQuotes ERROR :  ' || SQLERRM ||
+                                DBMS_UTILITY.format_error_backtrace, 1, 3000);
+      AddWAExecutionLog('EFD.PrintingQuotes', vd_LastExecutionDate, SYSDATE, 'F', vs_ErrorMessage);
+  END PrintingQuotes;
 END EFD;
 /
