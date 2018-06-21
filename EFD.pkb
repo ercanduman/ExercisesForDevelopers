@@ -1,6 +1,6 @@
 CREATE OR REPLACE PACKAGE BODY EDUMAN.EFD
 /**************************************************************************************
-  * Purpose    : The solution of all challenges of "Exercises for Programmers" book  written by "Brian P. Hogan".
+  * Purpose    : The solution for the challenges of "Exercises for Programmers" book  written by "Brian P. Hogan".
                  (57 Challenges to Develop Your Coding Skills)
   * Notes      : EFD: Exercises For Developers
                  All codes written in Oracle database language PLSQL on XE database. 
@@ -173,5 +173,72 @@ CREATE OR REPLACE PACKAGE BODY EDUMAN.EFD
                                 DBMS_UTILITY.format_error_backtrace, 1, 3000);
       AddWAExecutionLog('EFD.PrintingQuotes', vd_LastExecutionDate, SYSDATE, 'F', vs_ErrorMessage);
   END PrintingQuotes;
+
+  PROCEDURE SimpleMath
+  (
+    pin_FirstNumber  IN NUMBER,
+    pin_SecondNumber IN NUMBER
+  )
+  /**************************************************************************************
+    * Purpose    : Write a program that prompts for two numbers. Print the sum, difference, product, and quotient of those numbers
+    * Notes      : Don’t allow the user to enter a negative number.
+    * -------------------------------------------------------------------------------------
+    * Parameters : 
+     - pin_FirstNumber  : First number that user input to use for calculations.
+     - pin_SecondNumber : Second number that user input to use for calculations.
+    * Return     : N/A
+    * Exceptions : N/A
+    * -------------------------------------------------------------------------------------
+    * History    :        
+    | Author         | Date                 | Purpose
+    |-------         |-----------           |-----------------------------------
+    | Ercan DUMAN    | 21-JUN-2018          | Procedure creation.
+    **************************************************************************************/
+   IS
+    vd_LastExecutionDate DATE;
+    vs_ErrorMessage      VARCHAR2(3000);
+    ve_NegativeNumberException EXCEPTION;
+  BEGIN
+    vd_LastExecutionDate := SYSDATE;
+  
+    IF pin_FirstNumber < 0
+       OR pin_SecondNumber < 0 THEN
+      RAISE ve_NegativeNumberException;
+    END IF;
+  
+    dbms_output.put_line(cs_OUTPUT_SUCCESS_PREFIX ||
+                         'What is the first number? ' || pin_FirstNumber);
+    dbms_output.put_line(cs_OUTPUT_SUCCESS_PREFIX ||
+                         'What is the second number? ' || pin_SecondNumber);
+  
+    -- Output calculations
+    dbms_output.put_line(cs_PROGRAM_OUTPUT || pin_FirstNumber || ' + ' ||
+                         pin_SecondNumber || ' = ' ||
+                         (pin_FirstNumber + pin_SecondNumber));
+    dbms_output.put_line(cs_PROGRAM_OUTPUT || pin_FirstNumber || ' - ' ||
+                         pin_SecondNumber || ' = ' ||
+                         (pin_FirstNumber - pin_SecondNumber));
+    dbms_output.put_line(cs_PROGRAM_OUTPUT || pin_FirstNumber || ' * ' ||
+                         pin_SecondNumber || ' = ' ||
+                         (pin_FirstNumber * pin_SecondNumber));
+    dbms_output.put_line(cs_PROGRAM_OUTPUT || pin_FirstNumber || ' / ' ||
+                         pin_SecondNumber || ' = ' ||
+                         (pin_FirstNumber / pin_SecondNumber));
+  
+    -- logging  
+    AddWAExecutionLog('EFD.SimpleMath', vd_LastExecutionDate, SYSDATE, 'S', 'SimpleMath, Run successfully!');
+  EXCEPTION
+    WHEN ve_NegativeNumberException THEN
+      vs_ErrorMessage := SUBSTR('SimpleMath ERROR :  ' ||
+                                ' must enter only positive numbers! ' ||
+                                SQLERRM ||
+                                DBMS_UTILITY.format_error_backtrace, 1, 3000);
+      AddWAExecutionLog('EFD.SimpleMath', vd_LastExecutionDate, SYSDATE, 'F', vs_ErrorMessage);
+    WHEN OTHERS THEN
+      vs_ErrorMessage := SUBSTR('SimpleMath ERROR :  ' || SQLERRM ||
+                                DBMS_UTILITY.format_error_backtrace, 1, 3000);
+      AddWAExecutionLog('EFD.SimpleMath', vd_LastExecutionDate, SYSDATE, 'F', vs_ErrorMessage);
+  END SimpleMath;
+
 END EFD;
 /

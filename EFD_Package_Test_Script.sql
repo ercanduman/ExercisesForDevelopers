@@ -10,4 +10,8 @@ BEGIN
   -- challange no 3:
   dbms_output.put_line(chr(10) || 'Challange 3:');
   eduman.efd.PrintingQuotes(pis_Quote => 'These aren''t the droids you''re looking for.', pis_Author => 'Obi-Wan Kenobi');
+
+  -- challange no 5:
+  dbms_output.put_line(chr(10) || 'Challange 5:');
+  eduman.efd.SimpleMath(pin_FirstNumber => 10, pin_SecondNumber => 5);
 END;

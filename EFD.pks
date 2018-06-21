@@ -18,5 +18,10 @@ CREATE OR REPLACE PACKAGE EDUMAN.EFD
     pis_Quote  IN VARCHAR2,
     pis_Author IN VARCHAR2
   );
+  PROCEDURE SimpleMath
+  (
+    pin_FirstNumber  IN NUMBER,
+    pin_SecondNumber IN NUMBER
+  );
 END EFD;
 /
