@@ -18,7 +18,7 @@ CREATE OR REPLACE PACKAGE BODY EDUMAN.EFD
 
   PROCEDURE SayingHello(pis_Name IN VARCHAR2) IS
   BEGIN
-    dbms_output.put_line(cs_OUTPUT_SUCCESS_PREFIX || 'Hello, ' || pis_Name ||
+    dbms_output.put_line(cs_PROGRAM_OUTPUT || 'Hello, ' || pis_Name ||
                          ' nice to meet you!');
   END SayingHello;
 
@@ -34,8 +34,8 @@ CREATE OR REPLACE PACKAGE BODY EDUMAN.EFD
   
     dbms_output.put_line(cs_OUTPUT_SUCCESS_PREFIX ||
                          'What is the input string? ''' || pis_InputSring || '''');
-    dbms_output.put_line(cs_OUTPUT_SUCCESS_PREFIX || pis_InputSring ||
-                         ' has ' || vn_InputStringLentgh || ' characters!');
+    dbms_output.put_line(cs_PROGRAM_OUTPUT || pis_InputSring || ' has ' ||
+                         vn_InputStringLentgh || ' characters!');
   EXCEPTION
     WHEN ve_EmptyInputException THEN
       dbms_output.put_line(cs_OUTPUT_FAILURE_PREFIX ||
@@ -48,8 +48,12 @@ CREATE OR REPLACE PACKAGE BODY EDUMAN.EFD
     pis_Author IN VARCHAR2
   ) IS
   BEGIN
+    dbms_output.put_line(cs_OUTPUT_SUCCESS_PREFIX || 'What is the quote? ' ||
                          pis_Quote);
+    dbms_output.put_line(cs_OUTPUT_SUCCESS_PREFIX || 'Who said it? ' ||
                          pis_Author);
+    dbms_output.put_line(cs_PROGRAM_OUTPUT || pis_Author || ' says, "' ||
+                         pis_Quote || '"');
   END PrintingQuotes;
 END EFD;
 /
