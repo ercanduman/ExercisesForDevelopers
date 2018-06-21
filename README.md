@@ -6,6 +6,6 @@ All codes written in Oracle database language PLSQL on XE local database.
 
 A package created called EFD (Exercises For Developers) and a procedure/function created for each challenge based on requirements.
 
-You can find the referance book [here](https://books.google.com.tr/books?id=2A5QDwAAQBAJ)
+You can find the reference book [here](https://books.google.com.tr/books?id=2A5QDwAAQBAJ)
 
 Another PLSQL [project](https://github.com/ercanduman/Calculator_with_SOAP_webservices) 
