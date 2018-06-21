@@ -11,7 +11,6 @@ CREATE OR REPLACE PACKAGE BODY EDUMAN.EFD
    | Ercan DUMAN    | 25.01.2018           | Package creation.
   **************************************************************************************/
  IS
-  cs_OUTPUT_FAILURE_PREFIX CONSTANT VARCHAR2(7) := 'ERROR> ';
   cs_OUTPUT_SUCCESS_PREFIX CONSTANT VARCHAR2(7) := 'INFO> ';
   cs_PROGRAM_OUTPUT        CONSTANT VARCHAR2(8) := 'OUTPUT> ';
 
@@ -239,6 +238,85 @@ CREATE OR REPLACE PACKAGE BODY EDUMAN.EFD
                                 DBMS_UTILITY.format_error_backtrace, 1, 3000);
       AddWAExecutionLog('EFD.SimpleMath', vd_LastExecutionDate, SYSDATE, 'F', vs_ErrorMessage);
   END SimpleMath;
+
+  PROCEDURE RetirementCalculator
+  (
+    pin_UserAge       IN NUMBER,
+    pin_RetirementAge IN NUMBER
+  )
+  /**************************************************************************************
+    * Purpose    : Create a program that determines how many years you have left until retirement and the year you can retire.
+    * Notes      : Don’t hard-code the current year into your program. Get it from the system time
+                   Handle situations where the program returns a negative number by stating that the user can already retire.
+    * -------------------------------------------------------------------------------------
+    * Parameters : 
+     - pin_UserAge  : User age in curretn year.
+     - pin_RetirementAge : The age that user can legally retire.
+    * Return     : N/A
+    * Exceptions : N/A
+    * -------------------------------------------------------------------------------------
+    * History    :        
+    | Author         | Date                 | Purpose
+    |-------         |-----------           |-----------------------------------
+    | Ercan DUMAN    | 21-JUN-2018          | Procedure creation.
+    **************************************************************************************/
+   IS
+    vd_LastExecutionDate DATE;
+    vs_ErrorMessage      VARCHAR2(3000);
+    ve_NegativeNumberException EXCEPTION;
+    vn_RemainingYears NUMBER;
+  BEGIN
+    vd_LastExecutionDate := SYSDATE;
+  
+    IF pin_UserAge < 0
+       OR pin_RetirementAge < 0 THEN
+      RAISE ve_NegativeNumberException;
+    END IF;
+  
+    IF pin_UserAge > pin_RetirementAge THEN
+      vn_RemainingYears := pin_RetirementAge - pin_UserAge;
+      dbms_output.put_line(cs_OUTPUT_SUCCESS_PREFIX ||
+                           'What is your current age? ' || pin_UserAge);
+      dbms_output.put_line(cs_OUTPUT_SUCCESS_PREFIX ||
+                           'At what age would you like to retire? ' ||
+                           pin_RetirementAge);
+      -- Outputs
+      dbms_output.put_line(cs_PROGRAM_OUTPUT ||
+                           'Congrats! You already retired ' ||
+                           ABS(vn_RemainingYears) || ' years ago.');
+      dbms_output.put_line(cs_PROGRAM_OUTPUT || 'It''s ' ||
+                           to_char(SYSDATE, 'YYYY') ||
+                           ', so you retired in ' ||
+                           (to_char(SYSDATE, 'YYYY') + vn_RemainingYears) || '!');
+    ELSE
+      vn_RemainingYears := pin_RetirementAge - pin_UserAge;
+      dbms_output.put_line(cs_OUTPUT_SUCCESS_PREFIX ||
+                           'What is your current age? ' || pin_UserAge);
+      dbms_output.put_line(cs_OUTPUT_SUCCESS_PREFIX ||
+                           'At what age would you like to retire? ' ||
+                           pin_RetirementAge);
+    
+      dbms_output.put_line(cs_PROGRAM_OUTPUT || 'You have ' ||
+                           vn_RemainingYears ||
+                           ' years left until you can retire. ');
+      dbms_output.put_line(cs_PROGRAM_OUTPUT || 'It''s ' ||
+                           to_char(SYSDATE, 'YYYY') ||
+                           ' , so you can retire in ' ||
+                           (to_char(SYSDATE, 'YYYY') + vn_RemainingYears));
+    END IF;
+    AddWAExecutionLog('EFD.RetirementCalculator', vd_LastExecutionDate, SYSDATE, 'S', 'RetirementCalculator, Run successfully!');
+  EXCEPTION
+    WHEN ve_NegativeNumberException THEN
+      vs_ErrorMessage := SUBSTR('RetirementCalculator ERROR :  ' ||
+                                'Age cannot be negative! Should enter only positive numbers! ' ||
+                                SQLERRM ||
+                                DBMS_UTILITY.format_error_backtrace, 1, 3000);
+      AddWAExecutionLog('EFD.RetirementCalculator', vd_LastExecutionDate, SYSDATE, 'F', vs_ErrorMessage);
+    WHEN OTHERS THEN
+      vs_ErrorMessage := SUBSTR('RetirementCalculator ERROR :  ' || SQLERRM ||
+                                DBMS_UTILITY.format_error_backtrace, 1, 3000);
+      AddWAExecutionLog('EFD.RetirementCalculator', vd_LastExecutionDate, SYSDATE, 'F', vs_ErrorMessage);
+  END RetirementCalculator;
 
 END EFD;
 /

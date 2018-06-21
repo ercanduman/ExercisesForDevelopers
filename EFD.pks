@@ -23,5 +23,10 @@ CREATE OR REPLACE PACKAGE EDUMAN.EFD
     pin_FirstNumber  IN NUMBER,
     pin_SecondNumber IN NUMBER
   );
+  PROCEDURE RetirementCalculator
+  (
+    pin_UserAge       IN NUMBER,
+    pin_RetirementAge IN NUMBER
+  );
 END EFD;
 /
