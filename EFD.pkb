@@ -16,13 +16,44 @@ CREATE OR REPLACE PACKAGE BODY EDUMAN.EFD
   cs_OUTPUT_SUCCESS_PREFIX CONSTANT VARCHAR2(7) := 'INFO> ';
   cs_PROGRAM_OUTPUT        CONSTANT VARCHAR2(8) := 'OUTPUT> ';
 
-  PROCEDURE SayingHello(pis_Name IN VARCHAR2) IS
+  PROCEDURE SayingHello(pis_Name IN VARCHAR2)
+  /**************************************************************************************
+    * Purpose    : Create a program that prompts for your name and prints a greeting using your name.
+    * Notes      : N/A
+    * -------------------------------------------------------------------------------------
+    * Parameters : 
+      - pis_Name  : User name input text.
+    * Return     : N/A
+    * Exceptions : N/A
+    * -------------------------------------------------------------------------------------
+    * History    :        
+    | Author         | Date                 | Purpose
+    |-------         |-----------           |-----------------------------------
+    | Ercan DUMAN    | 25-JAN-2018          | Procedure creation.
+    **************************************************************************************/
+   IS
   BEGIN
     dbms_output.put_line(cs_PROGRAM_OUTPUT || 'Hello, ' || pis_Name ||
                          ' nice to meet you!');
   END SayingHello;
 
-  PROCEDURE CountingTheNumberOfCharacters(pis_InputSring VARCHAR2) IS
+  PROCEDURE CountingTheNumberOfCharacters(pis_InputSring VARCHAR2)
+  /**************************************************************************************
+    * Purpose    : Create a program that prompts for an input string and displays output that shows the input string and the number of characters the string contains.. 
+    * Notes      : If the user enters nothing, state that the user must enter something into the program.
+    * -------------------------------------------------------------------------------------
+    * Parameters : 
+     - pis_InputSring : Qoute input text.
+    * Return     : N/A
+    * Exceptions : 
+     - ve_EmptyInputException: Raised if the input is empty!
+    * -------------------------------------------------------------------------------------
+    * History    :        
+    | Author         | Date                 | Purpose
+    |-------         |-----------           |-----------------------------------
+    | Ercan DUMAN    | 20-JUN-2018          | Procedure creation.
+    **************************************************************************************/
+   IS
     vn_InputStringLentgh NUMBER;
     ve_EmptyInputException EXCEPTION;
   BEGIN
@@ -46,7 +77,23 @@ CREATE OR REPLACE PACKAGE BODY EDUMAN.EFD
   (
     pis_Quote  IN VARCHAR2,
     pis_Author IN VARCHAR2
-  ) IS
+  )
+  /**************************************************************************************
+    * Purpose    : Create a program that prompts for a quote and an author. Display the quotation and author. 
+    * Notes      : 
+    * -------------------------------------------------------------------------------------
+    * Parameters : 
+     - pis_Quote  : Qoute input text.
+     - pis_Author : The author of qoute.
+    * Return     : N/A
+    * Exceptions : N/A
+    * -------------------------------------------------------------------------------------
+    * History    :        
+    | Author         | Date                 | Purpose
+    |-------         |-----------           |-----------------------------------
+    | Ercan DUMAN    | 21-JUN-2018          | Procedure creation.
+    **************************************************************************************/
+   IS
   BEGIN
     dbms_output.put_line(cs_OUTPUT_SUCCESS_PREFIX || 'What is the quote? ' ||
                          pis_Quote);
@@ -55,5 +102,42 @@ CREATE OR REPLACE PACKAGE BODY EDUMAN.EFD
     dbms_output.put_line(cs_PROGRAM_OUTPUT || pis_Author || ' says, "' ||
                          pis_Quote || '"');
   END PrintingQuotes;
+
+  PROCEDURE AddWAExecutionLog
+  (
+    pis_WaName           EDUMAN.WA_EXECUTION_LOG.WA_NAME%TYPE,
+    pid_ProcessStartDate EDUMAN.WA_EXECUTION_LOG.PROCESS_START_DATE%TYPE,
+    pid_ProcessEndDate   EDUMAN.WA_EXECUTION_LOG.PROCESS_END_DATE%TYPE,
+    pis_Status           EDUMAN.WA_EXECUTION_LOG.STATUS%TYPE,
+    pis_Remark           EDUMAN.WA_EXECUTION_LOG.REMARK%TYPE
+  )
+  /**************************************************************************************
+      * Purpose    : To log/trace every process of workaround and insert the log data in  EDUMAN.WA_EXECUTION_LOG table.
+      * Notes      : N/A
+      * -------------------------------------------------------------------------------------
+      * Parameters :
+      - pis_WaName : Workaround name for execution log
+      - pid_ProcessStartDate : Execution start time
+      - pid_ProcessEndDate : Execution end time
+      - pis_Status : Status of execution process failed or succeed (F,S)
+      - pis_Remark : Remark for execution
+      * Return     : N/A
+      * Exceptions :
+      * -------------------------------------------------------------------------------------
+      * History    :
+       | Author        | Date                 | Purpose
+       |-------        |-----------           |----------------------------------------------
+       | Ercan DUMAN   | 21-JUN-2018          | Procedure creation.
+    **************************************************************************************/
+   IS
+    PRAGMA AUTONOMOUS_TRANSACTION; --> This means COMMIT only in this procedure, do not effect other processes.
+  BEGIN
+    INSERT INTO EDUMAN.WA_EXECUTION_LOG
+      (LOG_ID, WA_NAME, PROCESS_START_DATE, PROCESS_END_DATE, STATUS, REMARK, LOG_DATE)
+    VALUES
+      (EDUMAN.WA_EXECUTION_LOG_SEQ.NEXTVAL, pis_WaName, pid_ProcessStartDate, pid_ProcessEndDate, pis_Status, pis_Remark, SYSDATE);
+    COMMIT;
+  END AddWAExecutionLog;
+
 END EFD;
 /
