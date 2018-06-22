@@ -1,18 +1,12 @@
 CREATE OR REPLACE PACKAGE BODY EDUMAN.EFD
 /**************************************************************************************
-  * Purpose    : The solution for the challenges of "Exercises for Programmers" book  written by "Brian P. Hogan".
-                 (57 Challenges to Develop Your Coding Skills)
-  * Notes      : EFD: Exercises For Developers
-                 All codes written in Oracle database language PLSQL on XE database. 
-  * -------------------------------------------------------------------------------------
-  * History    :        
-   | Author         | Date                 | Purpose
-   |-------         |-----------           |-----------------------------------
-   | Ercan DUMAN    | 25.01.2018           | Package creation.
-  **************************************************************************************/
+Change History:
+ When                 Who                         What
+ 25.Jan.2018          Ercan DUMAN                 1.0: The solution for the challenges of "Exercises for Programmers" book  written by "Brian P. Hogan". (57 Challenges to Develop Your Coding Skills)
+                                                       EFD: Exercises For Developers. All codes written in Oracle database language PLSQL on XE local database.  When                 Who                         What
+    **************************************************************************************/
+
  IS
-  cs_OUTPUT_SUCCESS_PREFIX CONSTANT VARCHAR2(7) := 'INFO> ';
-  cs_PROGRAM_OUTPUT        CONSTANT VARCHAR2(8) := 'OUTPUT> ';
 
   PROCEDURE AddWAExecutionLog
   (
@@ -70,8 +64,7 @@ CREATE OR REPLACE PACKAGE BODY EDUMAN.EFD
     vs_ErrorMessage      VARCHAR2(3000);
   BEGIN
     vd_LastExecutionDate := SYSDATE;
-    dbms_output.put_line(cs_PROGRAM_OUTPUT || 'Hello, ' || pis_Name ||
-                         ' nice to meet you!');
+    dbms_output.put_line('Hello, ' || pis_Name || ' nice to meet you!');
     -- logging  
     AddWAExecutionLog('EFD.SayingHello', vd_LastExecutionDate, SYSDATE, 'S', 'SayingHello, Run successfully!');
   EXCEPTION
@@ -110,10 +103,9 @@ CREATE OR REPLACE PACKAGE BODY EDUMAN.EFD
       RAISE ve_EmptyInputException;
     END IF;
   
-    dbms_output.put_line(cs_OUTPUT_SUCCESS_PREFIX ||
-                         'What is the input string? ''' || pis_InputSring || '''');
-    dbms_output.put_line(cs_PROGRAM_OUTPUT || pis_InputSring || ' has ' ||
-                         vn_InputStringLentgh || ' characters!');
+    dbms_output.put_line('What is the input string? ''' || pis_InputSring || '''');
+    dbms_output.put_line(pis_InputSring || ' has ' || vn_InputStringLentgh ||
+                         ' characters!');
   
     -- logging  
     AddWAExecutionLog('EFD.CountingTheNumberOfCharacters', vd_LastExecutionDate, SYSDATE, 'S', 'CountingTheNumberOfCharacters, Run successfully!');
@@ -157,12 +149,9 @@ CREATE OR REPLACE PACKAGE BODY EDUMAN.EFD
     vs_ErrorMessage      VARCHAR2(3000);
   BEGIN
     vd_LastExecutionDate := SYSDATE;
-    dbms_output.put_line(cs_OUTPUT_SUCCESS_PREFIX || 'What is the quote? ' ||
-                         pis_Quote);
-    dbms_output.put_line(cs_OUTPUT_SUCCESS_PREFIX || 'Who said it? ' ||
-                         pis_Author);
-    dbms_output.put_line(cs_PROGRAM_OUTPUT || pis_Author || ' says, "' ||
-                         pis_Quote || '"');
+    dbms_output.put_line('What is the quote? ' || pis_Quote);
+    dbms_output.put_line('Who said it? ' || pis_Author);
+    dbms_output.put_line(pis_Author || ' says, "' || pis_Quote || '"');
   
     -- logging  
     AddWAExecutionLog('EFD.PrintingQuotes', vd_LastExecutionDate, SYSDATE, 'S', 'PrintingQuotes, Run successfully!');
@@ -205,24 +194,18 @@ CREATE OR REPLACE PACKAGE BODY EDUMAN.EFD
       RAISE ve_NegativeNumberException;
     END IF;
   
-    dbms_output.put_line(cs_OUTPUT_SUCCESS_PREFIX ||
-                         'What is the first number? ' || pin_FirstNumber);
-    dbms_output.put_line(cs_OUTPUT_SUCCESS_PREFIX ||
-                         'What is the second number? ' || pin_SecondNumber);
+    dbms_output.put_line('What is the first number? ' || pin_FirstNumber);
+    dbms_output.put_line('What is the second number? ' || pin_SecondNumber);
   
     -- Output calculations
-    dbms_output.put_line(cs_PROGRAM_OUTPUT || pin_FirstNumber || ' + ' ||
-                         pin_SecondNumber || ' = ' ||
-                         (pin_FirstNumber + pin_SecondNumber));
-    dbms_output.put_line(cs_PROGRAM_OUTPUT || pin_FirstNumber || ' - ' ||
-                         pin_SecondNumber || ' = ' ||
-                         (pin_FirstNumber - pin_SecondNumber));
-    dbms_output.put_line(cs_PROGRAM_OUTPUT || pin_FirstNumber || ' * ' ||
-                         pin_SecondNumber || ' = ' ||
-                         (pin_FirstNumber * pin_SecondNumber));
-    dbms_output.put_line(cs_PROGRAM_OUTPUT || pin_FirstNumber || ' / ' ||
-                         pin_SecondNumber || ' = ' ||
-                         (pin_FirstNumber / pin_SecondNumber));
+    dbms_output.put_line(pin_FirstNumber || ' + ' || pin_SecondNumber ||
+                         ' = ' || (pin_FirstNumber + pin_SecondNumber));
+    dbms_output.put_line(pin_FirstNumber || ' - ' || pin_SecondNumber ||
+                         ' = ' || (pin_FirstNumber - pin_SecondNumber));
+    dbms_output.put_line(pin_FirstNumber || ' * ' || pin_SecondNumber ||
+                         ' = ' || (pin_FirstNumber * pin_SecondNumber));
+    dbms_output.put_line(pin_FirstNumber || ' / ' || pin_SecondNumber ||
+                         ' = ' || (pin_FirstNumber / pin_SecondNumber));
   
     -- logging  
     AddWAExecutionLog('EFD.SimpleMath', vd_LastExecutionDate, SYSDATE, 'S', 'SimpleMath, Run successfully!');
@@ -275,32 +258,24 @@ CREATE OR REPLACE PACKAGE BODY EDUMAN.EFD
   
     IF pin_UserAge > pin_RetirementAge THEN
       vn_RemainingYears := pin_RetirementAge - pin_UserAge;
-      dbms_output.put_line(cs_OUTPUT_SUCCESS_PREFIX ||
-                           'What is your current age? ' || pin_UserAge);
-      dbms_output.put_line(cs_OUTPUT_SUCCESS_PREFIX ||
-                           'At what age would you like to retire? ' ||
+      dbms_output.put_line('What is your current age? ' || pin_UserAge);
+      dbms_output.put_line('At what age would you like to retire? ' ||
                            pin_RetirementAge);
       -- Outputs
-      dbms_output.put_line(cs_PROGRAM_OUTPUT ||
-                           'Congrats! You already retired ' ||
+      dbms_output.put_line('Congrats! You already retired ' ||
                            ABS(vn_RemainingYears) || ' years ago.');
-      dbms_output.put_line(cs_PROGRAM_OUTPUT || 'It''s ' ||
-                           to_char(SYSDATE, 'YYYY') ||
+      dbms_output.put_line('It''s ' || to_char(SYSDATE, 'YYYY') ||
                            ', so you retired in ' ||
                            (to_char(SYSDATE, 'YYYY') + vn_RemainingYears) || '!');
     ELSE
       vn_RemainingYears := pin_RetirementAge - pin_UserAge;
-      dbms_output.put_line(cs_OUTPUT_SUCCESS_PREFIX ||
-                           'What is your current age? ' || pin_UserAge);
-      dbms_output.put_line(cs_OUTPUT_SUCCESS_PREFIX ||
-                           'At what age would you like to retire? ' ||
+      dbms_output.put_line('What is your current age? ' || pin_UserAge);
+      dbms_output.put_line('At what age would you like to retire? ' ||
                            pin_RetirementAge);
     
-      dbms_output.put_line(cs_PROGRAM_OUTPUT || 'You have ' ||
-                           vn_RemainingYears ||
+      dbms_output.put_line('You have ' || vn_RemainingYears ||
                            ' years left until you can retire. ');
-      dbms_output.put_line(cs_PROGRAM_OUTPUT || 'It''s ' ||
-                           to_char(SYSDATE, 'YYYY') ||
+      dbms_output.put_line('It''s ' || to_char(SYSDATE, 'YYYY') ||
                            ' , so you can retire in ' ||
                            (to_char(SYSDATE, 'YYYY') + vn_RemainingYears));
     END IF;
@@ -317,6 +292,72 @@ CREATE OR REPLACE PACKAGE BODY EDUMAN.EFD
                                 DBMS_UTILITY.format_error_backtrace, 1, 3000);
       AddWAExecutionLog('EFD.RetirementCalculator', vd_LastExecutionDate, SYSDATE, 'F', vs_ErrorMessage);
   END RetirementCalculator;
+
+  PROCEDURE AreaOfARectangularRoom
+  (
+    pin_Length IN NUMBER,
+    pin_Width  IN NUMBER
+  )
+  /**************************************************************************************
+    * Purpose    : Create a program that calculates the area of a room. Prompt the user for the length and width of the room in feet. Then display the area in both square feet and square meters.
+    * Notes      : N/A
+    * -------------------------------------------------------------------------------------
+    * Parameters : 
+     - pin_Length  : The length of the room in feet.
+     - pin_Width   : The width of the room in feet.
+    * Return     : N/A
+    * Exceptions : N/A
+    * -------------------------------------------------------------------------------------
+    * History    :        
+    | Author         | Date                 | Purpose
+    |-------         |-----------           |-----------------------------------
+    | Ercan DUMAN    | 22-JUN-2018          | Procedure creation.
+    **************************************************************************************/
+   IS
+    vd_LastExecutionDate DATE;
+    vs_ErrorMessage      VARCHAR2(3000);
+    vs_OutputMessage     VARCHAR2(3000);
+    vn_ConversionFactor CONSTANT NUMBER := 9290304 / 100000000;
+  
+    ve_NegativeNumberException EXCEPTION;
+  BEGIN
+    vd_LastExecutionDate := SYSDATE;
+  
+    IF pin_Length < 0
+       OR pin_Width < 0 THEN
+      RAISE ve_NegativeNumberException;
+    END IF;
+  
+    dbms_output.put_line('What is the length of the room in feet? ' ||
+                         pin_Length);
+    dbms_output.put_line('What is the width of the room in feet? ' ||
+                         pin_Width);
+  
+    dbms_output.put_line('You entered dimensions of ' || pin_Length ||
+                         ' feet by ' || pin_Width || ' feet.');
+    vs_OutputMessage := 'The area is ' || chr(10) ||
+                        (pin_Length * pin_Width) || ' square feet ' ||
+                        chr(10) ||
+                        round(((pin_Length * pin_Width) *
+                              vn_ConversionFactor), 3) || ' square meters';
+  
+    dbms_output.put_line(vs_OutputMessage);
+    AddWAExecutionLog('EFD.AreaOfARectangularRoom', vd_LastExecutionDate, SYSDATE, 'S', 'AreaOfARectangularRoom, Run successfully! MESSAGE: ' ||
+                       chr(10) ||
+                       vs_OutputMessage);
+  EXCEPTION
+    WHEN ve_NegativeNumberException THEN
+      vs_ErrorMessage := SUBSTR('AreaOfARectangularRoom ERROR :  ' ||
+                                'Should enter only positive numbers! ' ||
+                                SQLERRM ||
+                                DBMS_UTILITY.format_error_backtrace, 1, 3000);
+      AddWAExecutionLog('EFD.AreaOfARectangularRoom', vd_LastExecutionDate, SYSDATE, 'F', vs_ErrorMessage);
+    WHEN OTHERS THEN
+      vs_ErrorMessage := SUBSTR('AreaOfARectangularRoom ERROR :  ' ||
+                                SQLERRM ||
+                                DBMS_UTILITY.format_error_backtrace, 1, 3000);
+      AddWAExecutionLog('EFD.AreaOfARectangularRoom', vd_LastExecutionDate, SYSDATE, 'F', vs_ErrorMessage);
+  END AreaOfARectangularRoom;
 
 END EFD;
 /

@@ -1,6 +1,5 @@
 # Exercises For Developers
-The challenge solutions of "Exercises for Programmers" book written by Brian P. Hoga". 
-"57 Challenges to Develop Your Coding Skills!”
+The challenge solutions of "Exercises for Programmers" book written by Brian P. Hoga". "57 Challenges to Develop Your Coding Skills!”
 
 All codes written in Oracle database language PLSQL on XE local database.  
 
